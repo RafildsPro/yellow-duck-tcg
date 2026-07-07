@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Plus, Pencil, Trash2, PackageMinus, Search } from 'lucide-react'
 import { useProducts } from '../hooks/useProducts'
-import { CATEGORIES, LOW_STOCK_THRESHOLD } from '../lib/constants'
+import { LOW_STOCK_THRESHOLD } from '../lib/constants'
 import { formatBRL } from '../lib/format'
 import ProductForm from '../components/ProductForm'
 import StockOutModal from '../components/StockOutModal'
@@ -24,6 +24,11 @@ export default function Products() {
   const [editingProduct, setEditingProduct] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [stockOutProduct, setStockOutProduct] = useState(null)
+
+  const categories = useMemo(
+    () => [...new Set(products.map((p) => p.category).filter(Boolean))].sort(),
+    [products]
+  )
 
   const filtered = useMemo(() => {
     const [field, dir] = sort.split('-')
@@ -91,7 +96,7 @@ export default function Products() {
           className="rounded-lg border border-navy-600 bg-navy-800 px-3 py-2 text-gray-100 outline-none focus:border-gold-500"
         >
           <option value="">Todas categorias</option>
-          {CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>

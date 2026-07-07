@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { CATEGORIES, CONDITIONS } from '../lib/constants'
+import { CONDITIONS } from '../lib/constants'
 import Modal from './Modal'
 
 const emptyForm = {
   name: '',
-  category: CATEGORIES[0],
+  category: '',
   quantity: 0,
   cost_price: 0,
   sale_price: 0,
@@ -98,17 +98,12 @@ export default function ProductForm({ product, onClose, onSave }) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-sm text-gray-300">Categoria</label>
-            <select
+            <input
               value={form.category}
               onChange={(e) => handleChange('category', e.target.value)}
+              placeholder="Opcional"
               className="w-full rounded-lg border border-navy-600 bg-navy-800 px-3 py-2 text-gray-100 outline-none focus:border-gold-500"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div>
             <label className="mb-1 block text-sm text-gray-300">Condição</label>

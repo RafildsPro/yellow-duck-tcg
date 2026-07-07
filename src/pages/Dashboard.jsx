@@ -33,12 +33,11 @@ export default function Dashboard() {
     <div className="space-y-6">
       <h1 className="text-xl font-semibold text-gray-100">Dashboard</h1>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={Wallet} label="Valor total em estoque" value={formatBRL(totalSaleValue)} accent />
         <StatCard icon={PiggyBank} label="Valor total investido" value={formatBRL(totalCostValue)} />
         <StatCard icon={TrendingUp} label="Lucro potencial estimado" value={formatBRL(potentialProfit)} accent />
         <StatCard icon={Boxes} label="Itens em estoque" value={totalItems} />
-        <StatCard icon={AlertTriangle} label="Produtos c/ estoque baixo" value={lowStockProducts.length} />
       </div>
 
       {lowStockProducts.length > 0 && (

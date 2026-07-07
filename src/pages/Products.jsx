@@ -24,6 +24,7 @@ export default function Products() {
   const [editingProduct, setEditingProduct] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [stockOutProduct, setStockOutProduct] = useState(null)
+  const [previewPhoto, setPreviewPhoto] = useState(null)
 
   const categories = useMemo(
     () => [...new Set(products.map((p) => p.category).filter(Boolean))].sort(),
@@ -134,7 +135,12 @@ export default function Products() {
               <tr key={p.id} className="bg-navy-900/40 hover:bg-navy-800">
                 <td className="flex items-center gap-2 px-4 py-3">
                   {p.photo_url ? (
-                    <img src={p.photo_url} alt={p.name} className="h-8 w-8 rounded object-cover" />
+                    <img
+                      src={p.photo_url}
+                      alt={p.name}
+                      onClick={() => setPreviewPhoto(p.photo_url)}
+                      className="h-8 w-8 cursor-zoom-in rounded object-cover"
+                    />
                   ) : (
                     <div className="h-8 w-8 rounded bg-navy-700" />
                   )}
@@ -198,6 +204,15 @@ export default function Products() {
           onClose={() => setStockOutProduct(null)}
           onConfirm={(qty, reason) => registerStockOut(stockOutProduct, qty, reason)}
         />
+      )}
+
+      {previewPhoto && (
+        <div
+          onClick={() => setPreviewPhoto(null)}
+          className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 p-4"
+        >
+          <img src={previewPhoto} alt="" className="max-h-[80vh] max-w-[80vw] rounded-2xl object-contain shadow-2xl" />
+        </div>
       )}
     </div>
   )

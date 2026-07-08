@@ -1,14 +1,14 @@
 import { useStockMovements } from '../hooks/useStockMovements'
 
-export default function Historico() {
+export default function Vendas() {
   const { movements, loading, error } = useStockMovements()
 
-  if (loading) return <p className="text-gray-400">Carregando histórico...</p>
+  if (loading) return <p className="text-gray-400">Carregando vendas...</p>
   if (error) return <p className="text-red-400">Erro ao carregar dados: {error}</p>
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold text-gray-100">Histórico de saídas</h1>
+      <h1 className="text-xl font-semibold text-gray-100">Vendas</h1>
 
       <div className="overflow-x-auto rounded-2xl border border-navy-700">
         <table className="w-full min-w-[600px] text-left text-sm">

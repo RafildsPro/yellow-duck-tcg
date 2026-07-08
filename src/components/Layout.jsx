@@ -40,13 +40,13 @@ export default function Layout() {
               Produtos
             </NavLink>
             <NavLink
-              to="/historico"
+              to="/vendas"
               className={({ isActive }) =>
                 `${navItem} ${isActive ? 'bg-gold-500/10 text-gold-500' : 'text-gray-300 hover:bg-navy-700'}`
               }
             >
               <History size={16} />
-              Histórico
+              Vendas
             </NavLink>
           </nav>
 

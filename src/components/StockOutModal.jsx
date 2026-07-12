@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Modal from './Modal'
 
+const QUICK_REASONS = ['Venda Local', 'Venda Online', 'Troca', 'Perda/Dano']
+
 export default function StockOutModal({ product, onClose, onConfirm }) {
   const [quantity, setQuantity] = useState(1)
   const [reason, setReason] = useState('')
@@ -45,6 +47,22 @@ export default function StockOutModal({ product, onClose, onConfirm }) {
 
         <div>
           <label className="mb-1 block text-sm text-gray-300">Motivo (opcional)</label>
+          <div className="mb-2 flex flex-wrap gap-2">
+            {QUICK_REASONS.map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setReason(r)}
+                className={`rounded-full border px-3 py-1 text-xs ${
+                  reason === r
+                    ? 'border-gold-500 bg-gold-500/10 text-gold-500'
+                    : 'border-navy-600 text-gray-300 hover:bg-navy-700'
+                }`}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
           <input
             value={reason}
             onChange={(e) => setReason(e.target.value)}

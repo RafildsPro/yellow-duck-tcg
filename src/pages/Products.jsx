@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import { Plus, Pencil, Trash2, PackageMinus, Search } from 'lucide-react'
+import { Plus, Pencil, Trash2, PackageMinus, MinusCircle, Layers, Search } from 'lucide-react'
 import { useProducts } from '../hooks/useProducts'
 import { LOW_STOCK_THRESHOLD } from '../lib/constants'
 import { formatBRL } from '../lib/format'
 import ProductForm from '../components/ProductForm'
 import StockOutModal from '../components/StockOutModal'
+import MultiSaleModal from '../components/MultiSaleModal'
 
 const SORT_OPTIONS = [
   { value: 'created_at-desc', label: 'Mais recentes' },
@@ -25,6 +26,7 @@ export default function Products() {
   const [showForm, setShowForm] = useState(false)
   const [stockOutProduct, setStockOutProduct] = useState(null)
   const [previewPhoto, setPreviewPhoto] = useState(null)
+  const [showMultiSale, setShowMultiSale] = useState(false)
 
   const categories = useMemo(
     () => [...new Set(products.map((p) => p.category).filter(Boolean))].sort(),
@@ -65,6 +67,11 @@ export default function Products() {
     await deleteProduct(product.id)
   }
 
+  async function handleQuickSale(product) {
+    if (product.quantity < 1) return
+    await registerStockOut(product, 1, 'Venda rápida')
+  }
+
   if (loading) return <p className="text-gray-400">Carregando produtos...</p>
   if (error) return <p className="text-red-400">Erro ao carregar dados: {error}</p>
 
@@ -72,13 +79,22 @@ export default function Products() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-semibold text-gray-100">Produtos</h1>
-        <button
-          onClick={openNewForm}
-          className="flex items-center gap-2 rounded-lg bg-gold-500 px-4 py-2 text-sm font-semibold text-navy-950 hover:bg-gold-400"
-        >
-          <Plus size={16} />
-          Novo produto
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowMultiSale(true)}
+            className="flex items-center gap-2 rounded-lg border border-navy-600 px-4 py-2 text-sm font-semibold text-gray-100 hover:bg-navy-700"
+          >
+            <Layers size={16} />
+            Venda múltipla
+          </button>
+          <button
+            onClick={openNewForm}
+            className="flex items-center gap-2 rounded-lg bg-gold-500 px-4 py-2 text-sm font-semibold text-navy-950 hover:bg-gold-400"
+          >
+            <Plus size={16} />
+            Novo produto
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -159,6 +175,14 @@ export default function Products() {
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1">
                     <button
+                      onClick={() => handleQuickSale(p)}
+                      disabled={p.quantity < 1}
+                      title="Vender 1 unidade rapidamente"
+                      className="rounded-lg p-2 text-gray-400 hover:bg-navy-700 hover:text-gold-500 disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      <MinusCircle size={16} />
+                    </button>
+                    <button
                       onClick={() => setStockOutProduct(p)}
                       title="Registrar saída"
                       className="rounded-lg p-2 text-gray-400 hover:bg-navy-700 hover:text-gold-500"
@@ -203,6 +227,14 @@ export default function Products() {
           product={stockOutProduct}
           onClose={() => setStockOutProduct(null)}
           onConfirm={(qty, reason) => registerStockOut(stockOutProduct, qty, reason)}
+        />
+      )}
+
+      {showMultiSale && (
+        <MultiSaleModal
+          products={products}
+          onClose={() => setShowMultiSale(false)}
+          onConfirm={(product, qty, reason) => registerStockOut(product, qty, reason)}
         />
       )}
 

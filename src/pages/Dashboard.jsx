@@ -48,9 +48,16 @@ export default function Dashboard() {
           </h2>
           <ul className="grid grid-cols-1 gap-1 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
             {lowStockProducts.map((p) => (
-              <li key={p.id} className="flex justify-between rounded-lg bg-navy-900 px-3 py-1.5">
-                <span>{p.name}</span>
-                <span className="text-yellow-400">{p.quantity} un.</span>
+              <li key={p.id} className="flex items-center justify-between gap-2 rounded-lg bg-navy-900 px-3 py-1.5">
+                <div className="flex min-w-0 items-center gap-2">
+                  {p.photo_url ? (
+                    <img src={p.photo_url} alt={p.name} className="h-8 w-8 flex-shrink-0 rounded object-cover" />
+                  ) : (
+                    <div className="h-8 w-8 flex-shrink-0 rounded bg-navy-700" />
+                  )}
+                  <span className="truncate">{p.name}</span>
+                </div>
+                <span className="flex-shrink-0 text-yellow-400">{p.quantity} un.</span>
               </li>
             ))}
           </ul>

@@ -48,10 +48,14 @@ export default function Dashboard() {
           </h2>
           <ul className="grid grid-cols-1 gap-2 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
             {lowStockProducts.map((p) => (
-              <li key={p.id} className="flex items-center justify-between gap-3 rounded-lg bg-navy-900 px-3 py-2">
+              <li key={p.id} className="relative flex items-center justify-between gap-3 rounded-lg bg-navy-900 px-3 py-2 hover:z-10">
                 <div className="flex min-w-0 items-center gap-3">
                   {p.photo_url ? (
-                    <img src={p.photo_url} alt={p.name} className="h-14 w-14 flex-shrink-0 rounded-lg object-cover" />
+                    <img
+                      src={p.photo_url}
+                      alt={p.name}
+                      className="h-14 w-14 flex-shrink-0 rounded-lg object-cover transition-transform duration-200 hover:scale-150"
+                    />
                   ) : (
                     <div className="h-14 w-14 flex-shrink-0 rounded-lg bg-navy-700" />
                   )}

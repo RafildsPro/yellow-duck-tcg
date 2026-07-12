@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, PackageMinus, MinusCircle, Layers, Search } from 
 import { useProducts } from '../hooks/useProducts'
 import { LOW_STOCK_THRESHOLD } from '../lib/constants'
 import { formatBRL } from '../lib/format'
+import { normalize } from '../lib/normalize'
 import ProductForm from '../components/ProductForm'
 import StockOutModal from '../components/StockOutModal'
 import MultiSaleModal from '../components/MultiSaleModal'
@@ -36,7 +37,7 @@ export default function Products() {
   const filtered = useMemo(() => {
     const [field, dir] = sort.split('-')
     return products
-      .filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
+      .filter((p) => normalize(p.name).includes(normalize(search)))
       .filter((p) => (category ? p.category === category : true))
       .sort((a, b) => {
         const va = a[field]

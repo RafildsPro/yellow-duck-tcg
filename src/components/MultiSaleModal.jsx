@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Search, Trash2 } from 'lucide-react'
 import Modal from './Modal'
+import { normalize } from '../lib/normalize'
 
 const QUICK_REASONS = ['Venda Local', 'Venda Online', 'Troca', 'Perda/Dano']
 
@@ -13,9 +14,9 @@ export default function MultiSaleModal({ products, onClose, onConfirm }) {
 
   const results = useMemo(() => {
     if (!search.trim()) return []
-    const term = search.toLowerCase()
+    const term = normalize(search)
     return products
-      .filter((p) => p.name.toLowerCase().includes(term))
+      .filter((p) => normalize(p.name).includes(term))
       .filter((p) => !items.some((i) => i.product.id === p.id))
       .slice(0, 6)
   }, [search, products, items])

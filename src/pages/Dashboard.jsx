@@ -46,14 +46,14 @@ export default function Dashboard() {
             <AlertTriangle size={16} />
             Estoque baixo (menos de {LOW_STOCK_THRESHOLD} unidades)
           </h2>
-          <ul className="grid grid-cols-1 gap-1 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-2 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
             {lowStockProducts.map((p) => (
-              <li key={p.id} className="flex items-center justify-between gap-2 rounded-lg bg-navy-900 px-3 py-1.5">
-                <div className="flex min-w-0 items-center gap-2">
+              <li key={p.id} className="flex items-center justify-between gap-3 rounded-lg bg-navy-900 px-3 py-2">
+                <div className="flex min-w-0 items-center gap-3">
                   {p.photo_url ? (
-                    <img src={p.photo_url} alt={p.name} className="h-8 w-8 flex-shrink-0 rounded object-cover" />
+                    <img src={p.photo_url} alt={p.name} className="h-14 w-14 flex-shrink-0 rounded-lg object-cover" />
                   ) : (
-                    <div className="h-8 w-8 flex-shrink-0 rounded bg-navy-700" />
+                    <div className="h-14 w-14 flex-shrink-0 rounded-lg bg-navy-700" />
                   )}
                   <span className="truncate">{p.name}</span>
                 </div>

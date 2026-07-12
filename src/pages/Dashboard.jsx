@@ -54,7 +54,7 @@ export default function Dashboard() {
                     <img
                       src={p.photo_url}
                       alt={p.name}
-                      className="h-14 w-14 flex-shrink-0 rounded-lg object-cover transition-transform duration-200 hover:scale-150"
+                      className="h-14 w-14 flex-shrink-0 rounded-lg object-cover transition-transform duration-200 hover:scale-[2.5]"
                     />
                   ) : (
                     <div className="h-14 w-14 flex-shrink-0 rounded-lg bg-navy-700" />

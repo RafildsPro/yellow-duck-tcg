@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { CONDITIONS } from '../lib/constants'
+import { compressImage } from '../lib/image'
 import Modal from './Modal'
 
 const emptyForm = {
@@ -32,6 +33,7 @@ export default function ProductForm({ product, onClose, onSave }) {
   )
   const [photoFile, setPhotoFile] = useState(null)
   const [preview, setPreview] = useState(product?.photo_url || null)
+  const [compressing, setCompressing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -39,11 +41,17 @@ export default function ProductForm({ product, onClose, onSave }) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  function handlePhotoChange(e) {
+  async function handlePhotoChange(e) {
     const file = e.target.files?.[0]
     if (!file) return
-    setPhotoFile(file)
-    setPreview(URL.createObjectURL(file))
+    setCompressing(true)
+    try {
+      const compressed = await compressImage(file)
+      setPhotoFile(compressed)
+      setPreview(URL.createObjectURL(compressed))
+    } finally {
+      setCompressing(false)
+    }
   }
 
   async function uploadPhoto() {
@@ -179,6 +187,7 @@ export default function ProductForm({ product, onClose, onSave }) {
             onChange={handlePhotoChange}
             className="w-full text-sm text-gray-300 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-600 file:px-3 file:py-1.5 file:text-gray-100"
           />
+          {compressing && <p className="mt-1 text-xs text-gray-500">Otimizando imagem...</p>}
           {preview && (
             <img src={preview} alt="Prévia" className="mt-2 h-24 w-24 rounded-lg object-cover" />
           )}
@@ -206,7 +215,7 @@ export default function ProductForm({ product, onClose, onSave }) {
           </button>
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || compressing}
             className="rounded-lg bg-gold-500 px-4 py-2 text-sm font-semibold text-navy-950 hover:bg-gold-400 disabled:opacity-60"
           >
             {saving ? 'Salvando...' : 'Salvar'}

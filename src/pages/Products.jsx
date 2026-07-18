@@ -164,7 +164,15 @@ export default function Products() {
                   <span className="text-gray-100">{p.name}</span>
                 </td>
                 <td className="px-4 py-3 text-gray-300">{p.category}</td>
-                <td className={`px-4 py-3 ${p.quantity < LOW_STOCK_THRESHOLD ? 'text-yellow-400 font-semibold' : 'text-gray-300'}`}>
+                <td
+                  className={`px-4 py-3 ${
+                    p.quantity === 0
+                      ? 'text-red-400 font-semibold'
+                      : p.quantity < LOW_STOCK_THRESHOLD
+                        ? 'text-yellow-400 font-semibold'
+                        : 'text-gray-300'
+                  }`}
+                >
                   {p.quantity}
                 </td>
                 <td className="px-4 py-3 text-gray-300">{formatBRL(p.cost_price)}</td>

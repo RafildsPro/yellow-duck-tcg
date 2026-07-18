@@ -61,7 +61,9 @@ export default function Dashboard() {
                   )}
                   <span className="truncate">{p.name}</span>
                 </div>
-                <span className="flex-shrink-0 text-yellow-400">{p.quantity} un.</span>
+                <span className={`flex-shrink-0 ${p.quantity === 0 ? 'text-red-400 font-semibold' : 'text-yellow-400'}`}>
+                  {p.quantity} un.
+                </span>
               </li>
             ))}
           </ul>

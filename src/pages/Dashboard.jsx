@@ -17,6 +17,26 @@ function StatCard({ icon: Icon, label, value, accent }) {
   )
 }
 
+function StockItem({ product, quantityClassName }) {
+  return (
+    <li className="relative flex items-center justify-between gap-3 rounded-lg bg-navy-900 px-3 py-2 hover:z-10">
+      <div className="flex min-w-0 items-center gap-3">
+        {product.photo_url ? (
+          <img
+            src={product.photo_url}
+            alt={product.name}
+            className="h-14 w-14 flex-shrink-0 rounded-lg object-cover transition-transform duration-200 hover:scale-[2.5]"
+          />
+        ) : (
+          <div className="h-14 w-14 flex-shrink-0 rounded-lg bg-navy-700" />
+        )}
+        <span className="truncate">{product.name}</span>
+      </div>
+      <span className={`flex-shrink-0 ${quantityClassName}`}>{product.quantity} un.</span>
+    </li>
+  )
+}
+
 export default function Dashboard() {
   const { products, loading, error } = useProducts()
 
@@ -24,7 +44,8 @@ export default function Dashboard() {
   const totalCostValue = products.reduce((sum, p) => sum + p.quantity * p.cost_price, 0)
   const potentialProfit = totalSaleValue - totalCostValue
   const totalItems = products.reduce((sum, p) => sum + p.quantity, 0)
-  const lowStockProducts = products.filter((p) => p.quantity < LOW_STOCK_THRESHOLD)
+  const zeroStockProducts = products.filter((p) => p.quantity === 0)
+  const lowStockProducts = products.filter((p) => p.quantity > 0 && p.quantity < LOW_STOCK_THRESHOLD)
 
   if (loading) return <p className="text-gray-400">Carregando dashboard...</p>
   if (error) return <p className="text-red-400">Erro ao carregar dados: {error}</p>
@@ -40,6 +61,20 @@ export default function Dashboard() {
         <StatCard icon={Boxes} label="Itens em estoque" value={totalItems} />
       </div>
 
+      {zeroStockProducts.length > 0 && (
+        <div className="rounded-2xl border border-red-700/50 bg-red-900/10 p-4">
+          <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-red-400">
+            <AlertTriangle size={16} />
+            Sem estoque
+          </h2>
+          <ul className="grid grid-cols-1 gap-2 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
+            {zeroStockProducts.map((p) => (
+              <StockItem key={p.id} product={p} quantityClassName="text-red-400 font-semibold" />
+            ))}
+          </ul>
+        </div>
+      )}
+
       {lowStockProducts.length > 0 && (
         <div className="rounded-2xl border border-yellow-700/40 bg-yellow-900/10 p-4">
           <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-yellow-400">
@@ -48,23 +83,7 @@ export default function Dashboard() {
           </h2>
           <ul className="grid grid-cols-1 gap-2 text-sm text-gray-300 sm:grid-cols-2 lg:grid-cols-3">
             {lowStockProducts.map((p) => (
-              <li key={p.id} className="relative flex items-center justify-between gap-3 rounded-lg bg-navy-900 px-3 py-2 hover:z-10">
-                <div className="flex min-w-0 items-center gap-3">
-                  {p.photo_url ? (
-                    <img
-                      src={p.photo_url}
-                      alt={p.name}
-                      className="h-14 w-14 flex-shrink-0 rounded-lg object-cover transition-transform duration-200 hover:scale-[2.5]"
-                    />
-                  ) : (
-                    <div className="h-14 w-14 flex-shrink-0 rounded-lg bg-navy-700" />
-                  )}
-                  <span className="truncate">{p.name}</span>
-                </div>
-                <span className={`flex-shrink-0 ${p.quantity === 0 ? 'text-red-400 font-semibold' : 'text-yellow-400'}`}>
-                  {p.quantity} un.
-                </span>
-              </li>
+              <StockItem key={p.id} product={p} quantityClassName="text-yellow-400" />
             ))}
           </ul>
         </div>
